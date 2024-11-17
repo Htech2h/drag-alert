@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resizable Example</title>
+  <link rel="stylesheet" href="{{styleUri}}">
+</head>
+<body>
+    <h1>Device Layout Preview</h1>
+  
+    <!-- Button Group Above Layout -->
+    <div class="button-group">
+      <p>{htmlFileName}</p>
+      <button onclick="resizeToPhone()" id="phone">📱 Phone</button>
+      <button onclick="resizeToLaptop()" id="laptop">💻 Laptop</button>
+    </div>
+    
+    <!-- Main Layout Container -->
+    <div class="container">
+      <div class="lay-out-body">
+        <div id="resizable-element" class="lay-out">Phone View </div>
+      </div>
+  
+      <div class="palette">
+        <div class="item-grid">
+          <div class="item" onclick="toggleContent(this)">>  Text</div>
+          <div class="content">
+            <p>paragraph</p>
+            <p>heading</p>
+          </div>
+          <div class="item" onclick="toggleContent(this)">>  Button</div>
+          <div class="content">Content for Button</div>
+          <div class="item" onclick="toggleContent(this)">>  Text Field</div>
+          <div class="content">Content for Text Field</div>
+          <div class="item" onclick="toggleContent(this)">>  Text Area</div>
+          <div class="content">Content for Text Area</div>
+          <div class="item" onclick="toggleContent(this)">>  Checkbox</div>
+          <div class="content">Content for Checkbox</div>
+          <div class="item" onclick="toggleContent(this)">>  Choice</div>
+          <div class="content">Content for Choice</div>
+          <div class="item" onclick="toggleContent(this)">>  List</div>
+          <div class="content">Content for List</div>
+          <div class="item" onclick="toggleContent(this)">>  Scrollbar</div>
+          <div class="content">Content for Scrollbar</div>
+          <div class="item" onclick="toggleContent(this)">>  Scroll Pane</div>
+          <div class="content">Content for Scroll Pane</div>
+          <div class="item" onclick="toggleContent(this)">>  Panel</div>
+          <div class="content">Content for Panel</div>
+        </div>
+      </div>
+  
+    </div>
+  <script src="{{scriptUri}}"></script>
+</body>
+</html>

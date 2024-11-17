@@ -1,0 +1,58 @@
+{
+  "name": "drag-alert",
+  "displayName": "drag Alert",
+  "description": "",
+  "icon": "src/resources/icon.jpg",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+  "onLanguage:plaintext",
+    "workspaceContains:**/*.dragAlert"
+],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "dragAlert.start",
+      "title": "Start DragAlert Editor"
+      }
+    ],
+    "customEditors": [
+      {
+        "viewType": "dragAlert.editor",
+        "displayName": "DragAlert Editor",
+        "selector": [
+          { "filenamePattern": "*.dragAlert" }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.9",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.95.0",
+    "@typescript-eslint/eslint-plugin": "^8.10.0",
+    "@typescript-eslint/parser": "^8.7.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.13.0",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "interactjs": "^1.10.27",
+    "lit-html": "^3.2.1"
+  }
+}
