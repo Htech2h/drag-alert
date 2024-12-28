@@ -3,6 +3,11 @@
 import * as vscode from 'vscode';
 import { DragAlertEditorProvider } from './editorProvider';
 
+import * as fs from 'fs';
+import * as path from 'path';
+import { error } from 'console';
+import { registerSaveListener } from './utils/webviewContent';
+
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.window.registerCustomEditorProvider(
@@ -16,6 +21,9 @@ export function activate(context: vscode.ExtensionContext) {
       }
     )
   );
+  
+  // Register the file rename save listener
+  registerSaveListener(context);
 }
 
 export function deactivate() {}

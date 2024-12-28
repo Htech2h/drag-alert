@@ -1,3 +1,5 @@
+
+
 const resizableElement = document.getElementById("resizable-element");
 
 // Load last saved device layout on page load
@@ -16,6 +18,7 @@ function applyLayout(width, height, label) {
   resizableElement.style.width = width;
   resizableElement.style.height = height;
   resizableElement.innerText = label;
+  resizableElement.innerHTML = "";
 }
 
 function saveLayout(width, height, label) {

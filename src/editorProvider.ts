@@ -46,6 +46,8 @@ export class DragAlertEditorProvider implements vscode.CustomTextEditorProvider 
     webviewPanel.title = 'DragAlert Editor';
     webview.options = { enableScripts: true };
     webview.html = htmlContent;
+
+    //fill phone or pc
   }
 }
 
