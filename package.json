@@ -1,7 +1,7 @@
 {
   "name": "drag-alert",
   "displayName": "drag Alert",
-  "description": "",
+  "description": "A drag-and-drop extension for VSCode with API key authentication",
   "icon": "src/resources/icon.jpg",
   "version": "0.0.1",
   "engines": {
@@ -11,15 +11,35 @@
     "Other"
   ],
   "activationEvents": [
-  "onLanguage:plaintext",
-    "workspaceContains:**/*.dragAlert"
-],
+    "onLanguage:plaintext",
+    "workspaceContains:**/*.da"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "dragAlert.start",
-      "title": "Start DragAlert Editor"
+        "title": "Start DragAlert Editor"
+      },
+      {
+        "command": "dragAlert.setApiKey",
+        "title": "DragAlert: Set API Key"
+      },
+      {
+        "command": "dragAlert.generateCode",
+        "title": "DragAlert: Generate Code"
+      },
+      {
+        "command": "dragAlert.previewLayout",
+        "title": "DragAlert: Preview Layout"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "dragAlert.generateCode",
+        "key": "ctrl+shift+g",
+        "mac": "cmd+shift+g",
+        "when": "editorTextFocus"
       }
     ],
     "customEditors": [
@@ -27,10 +47,28 @@
         "viewType": "dragAlert.editor",
         "displayName": "DragAlert Editor",
         "selector": [
-          { "filenamePattern": "*.dragAlert" }
+          {
+            "filenamePattern": "*.da"
+          }
         ]
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "dragAlert.previewLayout",
+          "when": "resourceFilename == dragAlert.da",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "dragAlert.previewLayout",
+          "when": "resourceFilename == dragAlert.da",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -50,9 +88,5 @@
     "@vscode/test-electron": "^2.4.1",
     "eslint": "^9.13.0",
     "typescript": "^5.6.3"
-  },
-  "dependencies": {
-    "interactjs": "^1.10.27",
-    "lit-html": "^3.2.1"
   }
 }
