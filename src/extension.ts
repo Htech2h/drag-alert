@@ -40,7 +40,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     const htmlPath = path.join(context.extensionPath, 'src', 'resources', 'webview.html');
     const htmlContent = fs.readFileSync(htmlPath, 'utf8');
-    panel.webview.html = htmlContent;
+    panel.webview.html = htmlContent.replace(/\$\{htmlFileName\}/g, 'Preferences');
   });
 
 
@@ -56,6 +56,9 @@ export async function activate(context: vscode.ExtensionContext) {
       supportsMultipleEditorsPerDocument: false,
     }
   );
+
+  // add disposables to context so they are cleaned up on deactivate
+  context.subscriptions.push(openWebviewCommand, editorRegistration);
 
   // Register preview layout command - only for dragAlert.da to show the layout preview
   const previewLayoutCommand = vscode.commands.registerCommand('dragAlert.previewLayout', async (uri?: vscode.Uri) => {
@@ -74,41 +77,34 @@ export async function activate(context: vscode.ExtensionContext) {
       const filename = path.basename(uri.fsPath, '.da');
       
       // Only dragAlert.da should show a preview, but it should be preferences preview, not layout preview
-      if (filename === 'dragAlert') {
-        vscode.window.showInformationMessage('DragAlert.da is for preferences and settings. Use the editor to configure your preferences.');
-        return;
+      // For any .da file open a preview webview using the bundled webview UI
+      const htmlPath = path.join(context.extensionPath, 'src', 'resources', 'webview.html');
+      if (fs.existsSync(htmlPath)) {
+        const panel = vscode.window.createWebviewPanel(
+          'dragAlertPreview',
+          `Layout Preview - ${filename}`,
+          vscode.ViewColumn.Beside,
+          {
+            enableScripts: true,
+            localResourceRoots: [vscode.Uri.file(path.join(context.extensionPath, 'src', 'resources'))]
+          }
+        );
+
+        const raw = fs.readFileSync(htmlPath, 'utf8');
+        panel.webview.html = raw.replace(/\$\{htmlFileName\}/g, filename + '.da');
+
+        // Tell the webview which file to load
+        panel.webview.postMessage({ command: 'loadLayoutFromFile', filePath: uri.fsPath });
       } else {
-        // For other .da files, show their layout preview
-        const htmlPath = path.join(context.extensionPath, 'src', 'resources', 'dragalert.html');
-        
-        if (fs.existsSync(htmlPath)) {
-          const panel = vscode.window.createWebviewPanel(
-            'dragAlertPreview',
-            `Layout Preview - ${filename}`,
-            vscode.ViewColumn.Beside,
-            {
-              enableScripts: true,
-              localResourceRoots: [vscode.Uri.file(path.join(context.extensionPath, 'src', 'resources'))]
-            }
-          );
-
-          const htmlContent = fs.readFileSync(htmlPath, 'utf8');
-          panel.webview.html = htmlContent;
-
-          // Load layout data from the specific .da file
-          panel.webview.postMessage({
-            command: 'loadLayoutFromFile',
-            filePath: uri.fsPath
-          });
-        } else {
-          vscode.window.showErrorMessage('dragalert.html preview file not found');
-        }
+        vscode.window.showErrorMessage('Preview UI not found');
       }
     } catch (error) {
       console.error('Error opening layout preview:', error);
       vscode.window.showErrorMessage(`Failed to open layout preview: ${error instanceof Error ? error.message : String(error)}`);
     }
   });
+
+  context.subscriptions.push(previewLayoutCommand);
 
   // Register file creation validation for .da files
   const fileWatcher = vscode.workspace.onWillCreateFiles(async (event) => {
@@ -164,13 +160,15 @@ export async function activate(context: vscode.ExtensionContext) {
       }
     );
 
-    const htmlPath = path.join(context.extensionPath, 'src', 'resources', 'dragalert.html');
-    const htmlContent = fs.readFileSync(htmlPath, 'utf8');
-    panel.webview.html = htmlContent;
+    const htmlPath = path.join(context.extensionPath, 'src', 'resources', 'webview.html');
+    const raw = fs.readFileSync(htmlPath, 'utf8');
+    panel.webview.html = raw.replace(/\$\{htmlFileName\}/g, 'Preferences');
 
 
 
   });
+
+  context.subscriptions.push(startCommand);
 
 
   // Register the file rename save listener
